@@ -22,7 +22,6 @@ bluez-utils \
 cups \
 avahi \
 reflector \
-code \
 steam \
 base-devel \
 go \
@@ -40,61 +39,10 @@ ncurses \
 xz \
 tk \
 libffi \
-python-openssl \
 flatpak \
 xf86-video-amdgpu \
 vulkan-tools \
-
-echo "installing pyenv"
-curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-
-echo "setting pyenv in .zshrc..."
-
-echo -e "\n# Configuração do pyenv" >> ~/.zshrc
-echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
-echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
-echo 'if command -v pyenv 1>/dev/null 2>&1; then' >> ~/.zshrc
-echo '  eval "$(pyenv init -)"' >> ~/.zshrc
-echo 'fi' >> ~/.zshrc
-
-echo "setting zsh as default shell..."
-chsh -s /bin/zsh
-zsh
-
-echo "setting up ohMyZsh..."
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-echo "space ship zsh theme..."
-git clone https://github.com/spaceship-prompt/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt" --depth=1
-ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
-
-echo "setting up zsh-autosuggestions..."
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-
-echo "setting up zsh-syntax-highlighting..."
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-
-# Alterar o .zshrc para usar o Spaceship Prompt e outros plugins
-sed -i 's/ZSH_THEME=".*"/ZSH_THEME="spaceship"/' ~/.zshrc
-sed -i 's/plugins=(.*)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
-
-echo "setting up font..."
-mkdir -p ~/.fonts
-git clone https://github.com/pdf/ubuntu-mono-powerline-ttf.git ~/.fonts/ubuntu-mono-powerline-ttf
-fc-cache -vf
-
-source ~/.zshrc
-
-cd ~
-
-echo "installing nvm and nodejs..."
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-nvm install node
-nvm use node
+code
 
 
 echo "installing yay..."
@@ -113,7 +61,7 @@ brave \
 
 
 echo "installing some adicional packages..."
-pacman -Sy --noconfirm \
+sudo pacman -Sy --noconfirm \
 retroarch \
 qbittorrent \
 firefox \
@@ -153,5 +101,31 @@ yay -Sy --noconfirm waydroid
 waydroid init -s GAPPS
 sudo systemctl enable --now waydroid-container.service
 
+echo "setting up font..."
+mkdir -p ~/.fonts
+git clone https://github.com/pdf/ubuntu-mono-powerline-ttf.git ~/.fonts/ubuntu-mono-powerline-ttf
+
 fc-cache -vf
-reboot
+
+echo "setting zsh as default shell..."
+chsh -s /bin/zsh
+
+echo "setting up ohMyZsh..."
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+echo "space ship zsh theme..."
+git clone https://github.com/spaceship-prompt/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt" --depth=1
+ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
+
+echo "setting up zsh-autosuggestions..."
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+
+echo "setting up zsh-syntax-highlighting..."
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+# Alterar o .zshrc para usar o Spaceship Prompt e outros plugins
+sed -i 's/ZSH_THEME=".*"/ZSH_THEME="spaceship"/' ~/.zshrc
+sed -i 's/plugins=(.*)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
+
+cd ~
+
