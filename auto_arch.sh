@@ -71,6 +71,9 @@ ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/the
 echo "setting up zsh-autosuggestions..."
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 
+echo "setting up zsh-syntax-highlighting..."
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
 # Alterar o .zshrc para usar o Spaceship Prompt e outros plugins
 sed -i 's/ZSH_THEME=".*"/ZSH_THEME="spaceship"/' ~/.zshrc
 sed -i 's/plugins=(.*)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
@@ -87,6 +90,9 @@ cd ~
 echo "installing nvm and nodejs..."
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
 nvm install node
 nvm use node
 
@@ -96,21 +102,21 @@ echo "installing yay..."
 git clone https://aur.archlinux.org/yay.git
 cd yay
 makepkg -si --noconfirm
-cd ..
+cd ~
 
 echo "installing packages from yay"
 yay -S --noconfirm \
 ttf-ms-fonts \
 spotube \
 xboxdrv \
-
-
+brave \
 
 
 echo "installing some adicional packages..."
 pacman -Sy --noconfirm \
 retroarch \
 qbittorrent \
+firefox \
 libreoffice-fresh \
 vlc \
 postgresql \
@@ -120,24 +126,32 @@ linux-rt-headers \
 obs-studio \
 
 echo "installing some packages with flatpak..."
-flatpak install flathub net.rpcs3.RPCS3
 flatpak install flathub net.pcsx2.PCSX2
-flatpak install flathub org.DolphinEmu.dolphin-emu
+flatpak install flathub net.rpcs3.RPCS3
 flatpak install flathub net.shadps4.shadPS4
-
+flatpak install flathub info.cemu.Cemu
+flatpak install flathub org.DolphinEmu.dolphin-emu
+flatpak install flathub io.github.ryubing.Ryujinx
 
 echo "installing ollama..."
 curl -fsSL https://ollama.com/install.sh | sh
 
 echo "installing docker..."
-sudo pacman -S docker
+sudo pacman -S --noconfirm docker
 sudo systemctl enable --now docker
 
-echo "installing vulkan drivers..."
-sudo pacman -S vulkan-radeon
+echo "adding user to docker group..."
+sudo usermod -aG docker $USER
 
+echo "installing vulkan and mesa drivers..."
+sudo pacman -S --noconfirm \
+vulkan-radeon \
+mesa
 
-
-
+echo "installing waydroid..."
+yay -Sy --noconfirm waydroid
+waydroid init -s GAPPS
+sudo systemctl enable --now waydroid-container.service
 
 fc-cache -vf
+reboot
