@@ -107,7 +107,7 @@ xboxdrv \
 
 
 
-echo "installing some adicional packages"
+echo "installing some adicional packages..."
 pacman -Sy --noconfirm \
 retroarch \
 qbittorrent \
